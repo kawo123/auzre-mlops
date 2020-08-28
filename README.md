@@ -1,6 +1,20 @@
 # MLOps: DevOps for Machine Learning
 
-TODO
+This repository contains example MLOps pipeline (bulit using Azure Machine Learning and GitHub Actions) for training, registering, serving, and managing machine learning models.
+
+## Pre-requisite
+
+- [Azure Machine Learning Python SDK](https://docs.microsoft.com/en-us/python/api/overview/azure/ml/?view=azure-ml-py)
+
+## Getting Started
+
+- Create new Azure Machine Learning service
+- Navigate to [AML Studio](https://ml.azure.com/)
+- Create new [compute instance](https://docs.microsoft.com/en-us/azure/machine-learning/concept-compute-instance)
+- After compute instance is provisioned, access JupyterLab
+- Clone this repo in JupyterLab
+- Unzip `data/porto_seguro_safe_driver_prediction_input.7z` to `data/porto_seguro_safe_driver_prediction_input.csv`
+
 
 ---
 

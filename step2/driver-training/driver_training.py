@@ -29,13 +29,13 @@ with open("parameters.json") as f:
 
 # Log each of the parameters to the run
 for param_name, param_value in parameters.items():
-    run.parent.log(param_name, param_value)
-    
+    run.parent.log(param_name, param_value) # using `run.parent.log` to log to parent run
+
 # Use the functions imported from train.py to prepare data, train the model, and calculate the metrics
 data = split_data(train_df)
 model = train_model(data, parameters)
 model_metrics = get_model_metrics(model, data)
-run.parent.log('auc', model_metrics['auc'])
+run.parent.log('auc', model_metrics['auc']) # using `run.parent.log` to log to parent run
 
 # Save the trained model to the output folder
 os.makedirs(output_folder, exist_ok=True)
