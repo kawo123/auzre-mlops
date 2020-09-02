@@ -1,0 +1,32 @@
+# Train a model on Azure Machine Learning   
+name: Train Model
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/train_model.yml'
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+
+
+    # Connect or Create the Azure Machine Learning Workspace
+    - name: Connect Azure Machine Learning Workspace
+      id: aml_workspace
+      uses: Azure/aml-workspace@v1
+      with:
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+    
+   
+    # # Submit a training run to the Azure Machine Learning
+    # - name: Submit training run
+    #   id: aml_run
+    #   uses: Azure/aml-run@v1
+    #   with:
+    #       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
