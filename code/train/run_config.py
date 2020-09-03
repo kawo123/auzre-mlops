@@ -1,3 +1,4 @@
+import os
 from azureml.core import ComputeTarget, Environment, Workspace
 from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core.runconfig import RunConfiguration
@@ -54,7 +55,9 @@ def create_pipeline(workspace, run_config):
     driver_ds = workspace.datasets.get("driver dataset")
 
     # Reference path to training folder
-    training_folder = 'driver-training'
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    print(dir_path)
+    training_folder = dir_path + '/driver-training'
 
     # Create a PipelineData (temporary Data Reference) for the model folder
     model_folder = PipelineData("model_folder",
