@@ -1,6 +1,8 @@
 # Train a model on Azure Machine Learning
 name: Train Model
 on:
+  repository_dispatch:
+    types: [dataset-registered]
   push:
     branches:
       - master
@@ -65,9 +67,9 @@ jobs:
           parameters_file: "run.json"
 
 
-    - name: Dispatch Repository Event model-training-complete
+    - name: Dispatch Repository Event model-trained
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.PATTOKEN }}
-        event-type: model-training-complete
+        event-type: model-trained
         client-payload: '{}'
