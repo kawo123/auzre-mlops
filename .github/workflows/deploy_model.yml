@@ -1,0 +1,49 @@
+name: Deploy model
+
+on:
+  repository_dispatch:
+    types: [run-completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      MODEL_NAME: "porto_seguro_safe_driver_model"
+      MODEL_VERSION: "6"
+    steps:
+      - name: Check variables
+        env:
+          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload.data) }}
+        run: |
+          if [ -z "${{ github.event.client_payload.data.experimentName }}"]; then echo "experiment id is NULL"; exit 1; else echo "model_name is ${{ toJson(github.event.client_payload.data.experimentName) }}"; fi;
+          if [ -z "${{ github.event.client_payload.data.runId }}"]; then echo "runId is NULL"; exit 1; else echo "model_version is ${{ toJson(github.event.client_payload.data.runId) }}"; fi;
+
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v2
+
+
+      - name: Connect Azure Machine Learning Workspace
+        id: aml_workspace
+        uses: Azure/aml-workspace@v1
+        with:
+            azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+
+      # Deploy your model to ACI
+      - name: Deploy ACI
+        id: deploy_aci
+        uses: Azure/aml-deploy@v1
+        with:
+            azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            model_name:  "${{ env.MODEL_NAME }}"
+            model_version: "${{ env.MODEL_VERSION }}"
+            parameters_file: "deploy_aci.json"
+
+
+      - name: Display Aci Deploy Details
+        run: |
+          echo scoring-endpoint: ${{ steps.deploy_aci.outputs.service_scoring_uri}}
+          echo swagger-uri: ${{ steps.deploy_aci.outputs.service_swagger_uri}}
