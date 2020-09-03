@@ -56,7 +56,6 @@ def create_pipeline(workspace, run_config):
 
     # Reference path to training folder
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    print(dir_path)
     training_folder = dir_path + '/driver-training'
 
     # Create a PipelineData (temporary Data Reference) for the model folder
