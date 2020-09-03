@@ -12,19 +12,21 @@ archive.extractall(path=archive_extract_path)
 archive.close()
 
 # Load the workspace
-ws = Workspace.from_config()
+# Note: aml_arm_config.json will be created by aml-workspace
+#       action in CI process
+ws = Workspace.from_config(_file_name='aml_arm_config.json')
 
-# get the datastore to upload prepared data
+# Get the datastore to upload prepared data
 datastore = ws.get_default_datastore()
 
-# upload the local file from src_dir to the target_path in datastore
+# Upload the local file from src_dir to the target_path in datastore
 data_path = archive_extract_path + '/porto_seguro_safe_driver_prediction_input.csv'
 datastore.upload_files(
     [data_path],
     target_path="data",
     overwrite=True)
 
-# create a dataset referencing the cloud location
+# Create a dataset referencing the cloud location
 dataset = Dataset.Tabular.from_delimited_files(datastore.path(
     'data/porto_seguro_safe_driver_prediction_input.csv'))
 
