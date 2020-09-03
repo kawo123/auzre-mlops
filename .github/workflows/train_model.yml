@@ -7,7 +7,7 @@ on:
     paths:
       - '.github/workflows/train_model.yml'
       - '.cloud/.azure/*'
-      - 'driver-training/**'
+      - 'code/train/**'
 jobs:
   train:
     runs-on: ubuntu-latest
