@@ -63,3 +63,11 @@ jobs:
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           parameters_file: "run.json"
+
+
+    - name: Dispatch Repository Event model-training-complete
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.PATTOKEN }}
+        event-type: model-training-complete
+        client-payload: '{}'
