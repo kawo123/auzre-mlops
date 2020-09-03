@@ -3,6 +3,11 @@ name: Deploy model
 on:
   repository_dispatch:
     types: [run-completed]
+  push:
+    branches:
+      - master
+    paths:
+      - '.cloud/.azure/deploy_aci.json'
 
 jobs:
   deploy:

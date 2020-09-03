@@ -4,8 +4,7 @@ from azureml.core import Run
 import joblib
 import json
 import os
-import pandas as pd
-import shutil
+
 
 # Import functions from train.py
 from train import split_data, train_model, get_model_metrics
@@ -31,7 +30,8 @@ with open("parameters.json") as f:
 for param_name, param_value in parameters.items():
     run.parent.log(param_name, param_value)
 
-# Use the functions imported from train.py to prepare data, train the model, and calculate the metrics
+# Use the functions imported from train.py to prepare data,
+# train the model, and calculate the metrics
 data = split_data(train_df)
 model = train_model(data, parameters)
 model_metrics = get_model_metrics(model, data)

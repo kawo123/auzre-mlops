@@ -6,7 +6,8 @@ on:
       - master
     paths:
       - '.github/workflows/train_model.yml'
-      - '.cloud/.azure/*'
+      - '.cloud/.azure/run.json'
+      - '.cloud/.azure/compute.json'
       - 'code/train/**'
 jobs:
   train:
@@ -18,7 +19,28 @@ jobs:
       uses: actions/checkout@v2
 
 
-    # Connect or Create the Azure Machine Learning Workspace
+    - name: Setup Python 3.x
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+
+    - name: Python Linting (flake8)
+      run: |
+        flake8 --max-line-length=100 code/**
+
+
+    - name: Python Testing (pytest)
+      run: |
+        pytest code/train/driver-training/test_train.py
+
+
     - name: Connect Azure Machine Learning Workspace
       id: aml_workspace
       uses: Azure/aml-workspace@v1
@@ -27,16 +49,15 @@ jobs:
           parameters_file: "workspace.json"
 
 
-    # AML Compute Action
-    - uses: Azure/aml-compute@v1
+    - name: Create Azure Machine Learning Compute Cluster
+      uses: Azure/aml-compute@v1
       id: aml_compute
       with:
         azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
         parameters_file: "compute.json"
 
 
-    # Submit a training run to the Azure Machine Learning
-    - name: Submit training run
+    - name: Submit Azure Machine Learning Training Pipeline
       id: aml_run
       uses: Azure/aml-run@v1
       with:

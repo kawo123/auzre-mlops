@@ -1,2 +1,5 @@
 py7zr==0.9.5
 azureml-sdk==1.13.0
+flake8==3.8.3
+pytest==6.0.1
+lightgbm==3.0.0

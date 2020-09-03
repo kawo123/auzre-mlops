@@ -19,9 +19,6 @@ model_file = model_folder + "/" + model_name + ".pkl"
 
 # Get metrics for registration
 metrics = run.parent.get_metrics()
-## HINT: Try storing the metrics in the parent run, which will be
-##       accessible during both the training and registration
-##       child runs using the 'run.parent' API.
 
 # Register the model
 run.upload_file(model_name, model_file)
