@@ -20,7 +20,7 @@ output_folder = args.output_folder
 run = Run.get_context()
 
 # load the safe driver prediction dataset
-train_df = pd.read_csv('porto_seguro_safe_driver_prediction_input.csv')
+train_df = run.input_datasets['driver_train'].to_pandas_dataframe()
 
 # Load the parameters for training the model from the file
 with open("parameters.json") as f:
@@ -30,7 +30,7 @@ with open("parameters.json") as f:
 # Log each of the parameters to the run
 for param_name, param_value in parameters.items():
     run.parent.log(param_name, param_value)
-    
+
 # Use the functions imported from train.py to prepare data, train the model, and calculate the metrics
 data = split_data(train_df)
 model = train_model(data, parameters)
