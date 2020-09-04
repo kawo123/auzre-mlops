@@ -36,6 +36,12 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
 
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+
       - name: Connect Azure Machine Learning Workspace
         id: aml_workspace
         uses: Azure/aml-workspace@v1
