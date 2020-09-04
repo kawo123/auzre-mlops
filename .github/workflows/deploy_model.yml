@@ -7,6 +7,7 @@ on:
     branches:
       - master
     paths:
+      - '.github/workflows/deploy_model.yml'
       - '.cloud/.azure/deploy_aci.json'
 
 jobs:
@@ -15,6 +16,7 @@ jobs:
     env:
       MODEL_NAME: "porto_seguro_safe_driver_model"
       MODEL_VERSION: "6"
+      SERVICE_NAME: "service-aci-mlops-ci"
     steps:
       - name: Check Out Repository
         id: checkout_repository
@@ -32,13 +34,18 @@ jobs:
         id: deploy_aci
         uses: Azure/aml-deploy@v1
         with:
-            azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            model_name:  "${{ env.MODEL_NAME }}"
-            model_version: "${{ env.MODEL_VERSION }}"
-            parameters_file: "deploy_aci.json"
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          model_name:  "${{ env.MODEL_NAME }}"
+          model_version: "${{ env.MODEL_VERSION }}"
+          parameters_file: "deploy_aci.json"
 
 
       - name: Display Aci Deploy Details
         run: |
           echo scoring-endpoint: ${{ steps.deploy_aci.outputs.service_scoring_uri}}
           echo swagger-uri: ${{ steps.deploy_aci.outputs.service_swagger_uri}}
+
+
+      - name: Smoke Test ACI
+        run: |
+          python code/util/smoke_test_webservice.py --type ACI --service "${{ env.SERVICE_NAME }}"
