@@ -24,12 +24,19 @@ jobs:
         python-version: '3.x'
 
 
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+
     - name: Connect Azure Machine Learning Workspace
       id: aml_workspace
       uses: Azure/aml-workspace@v1
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           parameters_file: "workspace.json"
+
 
     - name: Install Python Dependencies
       run: |
