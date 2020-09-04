@@ -1,6 +1,7 @@
 # Register a dataset on Azure Machine Learning
 name: Register Dataset
 on:
+  workflow_dispatch: {}
   push:
     branches:
       - master
