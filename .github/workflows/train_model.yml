@@ -1,6 +1,7 @@
 # Train a model on Azure Machine Learning
 name: Train Model
 on:
+  workflow_dispatch: {}
   repository_dispatch:
     types: [dataset-registered]
   push:
