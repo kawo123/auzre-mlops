@@ -10,6 +10,8 @@ on:
     paths:
       - '.github/workflows/deploy_model.yml'
       - '.cloud/.azure/deploy_aci.json'
+      - 'code/service/*'
+      - 'code/util/*'
 
 jobs:
   deploy:
