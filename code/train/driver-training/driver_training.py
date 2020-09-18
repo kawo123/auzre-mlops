@@ -36,6 +36,8 @@ data = split_data(train_df)
 model = train_model(data, parameters)
 model_metrics = get_model_metrics(model, data)
 run.parent.log('auc', model_metrics['auc'])
+run.parent.log('f1_macro', model_metrics['f1_macro'])
+run.parent.log('f1_micro', model_metrics['f1_micro'])
 
 # Save the trained model to the output folder
 os.makedirs(output_folder, exist_ok=True)

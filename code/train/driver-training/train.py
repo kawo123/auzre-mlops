@@ -41,6 +41,12 @@ def get_model_metrics(model, data):
     valid_data = data[1]
     predictions = model.predict(valid_data.data)
     fpr, tpr, thresholds = metrics.roc_curve(valid_data.label, predictions)
-    model_metrics = {"auc": (metrics.auc(fpr, tpr))}
+    f1_macro = metrics.f1_score(valid_data.label, predictions.round(), average='macro')
+    f1_micro = metrics.f1_score(valid_data.label, predictions.round(), average='micro')
+    model_metrics = {
+        "auc": (metrics.auc(fpr, tpr)),
+        "f1_macro": f1_macro,
+        "f1_micro": f1_micro
+    }
 
     return model_metrics
