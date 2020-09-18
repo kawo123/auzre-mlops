@@ -58,9 +58,15 @@ def create_pipeline(workspace, run_config):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     training_folder = dir_path + '/driver-training'
 
-    # Create a PipelineData (temporary Data Reference) for the model folder
-    model_folder = PipelineData("model_folder",
-                                datastore=workspace.get_default_datastore())
+    # Create a PipelineData (temporary Data Reference)
+    model_metrics = PipelineData(
+        "model_metrics",
+        datastore=workspace.get_default_datastore()
+    )
+    model_folder = PipelineData(
+        "model_folder",
+        datastore=workspace.get_default_datastore()
+    )
 
     # Create Estimator to train model
     estimator = Estimator(source_directory=training_folder,
@@ -68,7 +74,18 @@ def create_pipeline(workspace, run_config):
                           compute_target=run_config.target,
                           environment_definition=run_config.environment)
 
-    # Create Step 1, which runs the estimator to train the model
+    # # Create Step 1, which runs the estimator to train the model
+    # train_step = EstimatorStep(
+    #     name="Train Model",
+    #     estimator=estimator,
+    #     estimator_entry_script_arguments=[
+    #         '--output_folder',
+    #         model_folder],
+    #     inputs=[
+    #         driver_ds.as_named_input('driver_train')],
+    #     outputs=[model_folder],
+    #     compute_target=run_config.target,
+    #     allow_reuse=True)
     train_step = EstimatorStep(
         name="Train Model",
         estimator=estimator,
@@ -77,11 +94,22 @@ def create_pipeline(workspace, run_config):
             model_folder],
         inputs=[
             driver_ds.as_named_input('driver_train')],
-        outputs=[model_folder],
+        outputs=[model_metrics],
         compute_target=run_config.target,
         allow_reuse=True)
 
-    # Create Step 2, which runs the model registration script
+    # Create Step 2, which runs the model evaluation script
+    evaluate_step = PythonScriptStep(
+        name="Evaluate Model",
+        source_directory=training_folder,
+        script_name="evaluate_model.py",
+        inputs=[model_metrics],
+        outputs=[model_folder],
+        compute_target=run_config.target,
+        runconfig=run_config,
+        allow_reuse=True)
+
+    # Create Step 3, which runs the model registration script
     register_step = PythonScriptStep(
         name="Register Model",
         source_directory=training_folder,
@@ -97,7 +125,8 @@ def create_pipeline(workspace, run_config):
     print("Pipeline steps defined")
 
     # Construct the pipeline
-    pipeline_steps = [train_step, register_step]
+    # pipeline_steps = [train_step, register_step]
+    pipeline_steps = [train_step, evaluate_step, register_step]
     pipeline = Pipeline(workspace=workspace, steps=pipeline_steps)
 
     print("Pipeline is built.")
