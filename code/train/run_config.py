@@ -92,8 +92,8 @@ def create_pipeline(workspace, run_config):
         name="Evaluate Model",
         source_directory=training_folder,
         script_name="evaluate_model.py",
-        inputs=[model_folder],
-        outputs=[],
+        # inputs=[model_folder],
+        # outputs=[],
         compute_target=run_config.target,
         runconfig=run_config,
         allow_reuse=True)
@@ -113,8 +113,10 @@ def create_pipeline(workspace, run_config):
 
     print("Pipeline steps defined")
 
-    # Construct the pipeline
+    # Define step dependency and construct the pipeline
     # pipeline_steps = [train_step, register_step]
+    evaluate_step.run_after(train_step)
+    register_step.run_after(evaluate_step)
     pipeline_steps = [train_step, evaluate_step, register_step]
     pipeline = Pipeline(workspace=workspace, steps=pipeline_steps)
 
