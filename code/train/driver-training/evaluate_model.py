@@ -26,5 +26,5 @@ if auc_rounded <= auc_rounded_reg_model:
             f'of the most recent model version ({model.version}).'
         )
     )
-
-run.complete()
+else:
+    run.complete()
