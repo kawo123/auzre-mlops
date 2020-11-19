@@ -59,10 +59,10 @@ def create_pipeline(workspace, run_config):
     training_folder = dir_path + '/driver-training'
 
     # Create a PipelineData (temporary Data Reference)
-    model_metrics = PipelineData(
-        "model_metrics",
-        datastore=workspace.get_default_datastore()
-    )
+    # model_metrics = PipelineData(
+    #     "model_metrics",
+    #     datastore=workspace.get_default_datastore()
+    # )
     model_folder = PipelineData(
         "model_folder",
         datastore=workspace.get_default_datastore()
