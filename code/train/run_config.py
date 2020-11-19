@@ -94,7 +94,7 @@ def create_pipeline(workspace, run_config):
             model_folder],
         inputs=[
             driver_ds.as_named_input('driver_train')],
-        outputs=[model_metrics],
+        outputs=[model_folder],
         compute_target=run_config.target,
         allow_reuse=True)
 
@@ -103,7 +103,7 @@ def create_pipeline(workspace, run_config):
         name="Evaluate Model",
         source_directory=training_folder,
         script_name="evaluate_model.py",
-        inputs=[model_metrics],
+        inputs=[model_folder],
         outputs=[model_folder],
         compute_target=run_config.target,
         runconfig=run_config,
