@@ -15,8 +15,8 @@ model = Model(
     name=model_name
 )
 
-auc_rounded = round(metrics['auc'], 8)
-auc_rounded_reg_model = round(model.tags['auc'], 8)
+auc_rounded = round(float(metrics['auc']), 8)
+auc_rounded_reg_model = round(float(model.tags['auc']), 8)
 
 if auc_rounded <= auc_rounded_reg_model:
     run.fail(
