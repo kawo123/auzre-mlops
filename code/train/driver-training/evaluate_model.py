@@ -18,7 +18,8 @@ model = Model(
 auc_rounded = round(float(metrics['auc']), 8)
 auc_rounded_reg_model = round(float(model.tags['auc']), 8)
 
-if auc_rounded <= auc_rounded_reg_model:
+# if auc_rounded <= auc_rounded_reg_model:  # for production
+if auc_rounded < auc_rounded_reg_model:  # for development
     run.fail(
         error_details=(
             f'AUC ({auc_rounded}) of the trained model is '
