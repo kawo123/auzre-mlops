@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MODEL_NAME: "porto_seguro_safe_driver_model"
-      MODEL_VERSION: "6"
+      MODEL_VERSION: 13
       SERVICE_NAME: "service-aci-mlops-ci"
     steps:
       - name: Check Out Repository
@@ -29,7 +29,7 @@ jobs:
       - name: Setup Python 3.x
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.7'
 
 
       - name: Install Python Dependencies
